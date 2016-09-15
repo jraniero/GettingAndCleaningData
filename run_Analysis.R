@@ -12,12 +12,12 @@ train_subject<-read.table("./UCI Har Dataset/train/subject_train.txt")
 test_subject<-read.table("./UCI Har Dataset/test/subject_test.txt")
 
 #Merge the data from different files in one dataset
-merged<-cbind(rbind(test,train),rbind(test_activ,train_activ),rbind(test_subject,train_subject))
+merged<-cbind(rbind(test_activ,train_activ),rbind(test_subject,train_subject),rbind(test,train))
 
 #Provide the names
-names(merged)<-features[,2]
-names(merged)[562]<-"Activity"
-names(merged)[563]<-"Subject"
+names(merged)<-c("Activity","Subject",as.character(features[,2]))
+#names(merged)[562]<-"Activity"
+#names(merged)[563]<-"Subject"
 
 #Give factor for Activities
 print("Test and Train merged")
@@ -29,10 +29,10 @@ levels(merged$Activity)<-activity_labels[,2]
 #tidy<-select(merged,mean_and_std,Activity)
 
 #Without dplyr
-#Subselect columns
+#Subselect columnsname
 mean_and_std<-grep("mean|std",names(merged))
 tidy<-merged[mean_and_std]
-tidy<-cbind(tidy,merged$Activity,merged$Subject)
+tidy<-cbind(merged$Activity,merged$Subject,tidy)
 
 #Clean names
 names(tidy)<-sub("Acc","Acceleration",names(tidy)) #Use full name
@@ -43,9 +43,8 @@ names(tidy)<-gsub("[\\(|\\)]","",names(tidy)) #Remove parenthesis
 names(tidy)<-sub(".*\\$","",names(tidy)) #Remove the leading merged$...
 #grouped<-group_by(merged,Activity)
 
-#perActivitySummary<-summarize(grouped,mean())
-
-
-#grouped<-group_by(merged,Activity)
+#Aggregate all variables on Activity and Subject
+tidy_agg<-aggregate(tidy[3:81],list(tidy$Activity,tidy$Subject),mean)
+names(tidy_agg)<-c("Activity","Subject",paste(names(tidy_agg[3:81]),"MeanPerGroup"))
 
 #perActivitySummary<-summarize(grouped,mean())
