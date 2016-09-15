@@ -19,10 +19,12 @@ names(merged)<-c("Activity","Subject",as.character(features[,2]))
 #names(merged)[562]<-"Activity"
 #names(merged)[563]<-"Subject"
 
-#Give factor for Activities
+#Give factor for Activities and Subject
 print("Test and Train merged")
 merged$Activity<-as.factor(merged$Activity)
 levels(merged$Activity)<-activity_labels[,2]
+merged$Subject<-as.factor(merged$Subject)
+
 
 #With dplyr
 #mean_and_std<-grep("mean|std",names(merged),value=TRUE)
