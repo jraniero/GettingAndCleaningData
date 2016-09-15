@@ -48,5 +48,5 @@ names(tidy)<-sub(".*\\$","",names(tidy)) #Remove the leading merged$...
 #Aggregate all variables on Activity and Subject
 tidy_agg<-aggregate(tidy[3:81],list(tidy$Activity,tidy$Subject),mean)
 names(tidy_agg)<-c("Activity","Subject",paste(names(tidy_agg[3:81]),"MeanPerGroup"))
-
+#
 #perActivitySummary<-summarize(grouped,mean())
