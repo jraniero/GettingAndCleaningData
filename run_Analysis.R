@@ -1,27 +1,50 @@
-library(dplyr)
-library(Hmisc)
+#library(dplyr)
+#library(Hmisc)
 
-
+#Load the files
 activity_labels<-read.table("./UCI HAR Dataset/activity_labels.txt",sep=" ")
 features<-read.table("./UCI HAR Dataset/features.txt")
 train<-read.table("./UCI Har Dataset/train/X_train.txt")
 test<-read.table("./UCI Har Dataset/test/X_test.txt")
 test_activ<-read.table("./UCI Har Dataset/test/Y_test.txt")
 train_activ<-read.table("./UCI Har Dataset/train/Y_train.txt")
-names(test_activ)<-c("Activity")
-names(test)<-features[,2]
-test<-cbind(test,test_activ)
-train<-cbind(train,train_activ)
+train_subject<-read.table("./UCI Har Dataset/train/subject_train.txt")
+test_subject<-read.table("./UCI Har Dataset/test/subject_test.txt")
 
-merged<-rbind(test,train)
+#Merge the data from different files in one dataset
+merged<-cbind(rbind(test,train),rbind(test_activ,train_activ),rbind(test_subject,train_subject))
 
-Print "merged"
+#Provide the names
+names(merged)<-features[,2]
+names(merged)[562]<-"Activity"
+names(merged)[563]<-"Subject"
+
+#Give factor for Activities
+print("Test and Train merged")
 merged$Activity<-as.factor(merged$Activity)
 levels(merged$Activity)<-activity_labels[,2]
 
-mean_and_std<-grep("mean|std",names(merged),value=TRUE)
+#With dplyr
+#mean_and_std<-grep("mean|std",names(merged),value=TRUE)
+#tidy<-select(merged,mean_and_std,Activity)
 
-merged<-select(merged,mean_and_std,Activity)
+#Without dplyr
+#Subselect columns
+mean_and_std<-grep("mean|std",names(merged))
+tidy<-merged[mean_and_std]
+tidy<-cbind(tidy,merged$Activity,merged$Subject)
+
+#Clean names
+names(tidy)<-sub("Acc","Acceleration",names(tidy)) #Use full name
+names(tidy)<-sub("^[t|f]","",names(tidy)) #Remove some leading letters
+names(tidy)<-sub("-mean","Mean",names(tidy)) #Correct case for mean
+names(tidy)<-sub("-std","StandardDeviation",names(tidy)) #Use full name for standard deviation
+names(tidy)<-gsub("[\\(|\\)]","",names(tidy)) #Remove parenthesis
+names(tidy)<-sub(".*\\$","",names(tidy)) #Remove the leading merged$...
+#grouped<-group_by(merged,Activity)
+
+#perActivitySummary<-summarize(grouped,mean())
+
 
 #grouped<-group_by(merged,Activity)
 
