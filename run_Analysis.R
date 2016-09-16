@@ -1,6 +1,3 @@
-#library(dplyr)
-#library(Hmisc)
-
 #Load the files
 
 base_path<-"UCI Har Dataset"
@@ -34,12 +31,6 @@ merged$Activity<-as.factor(merged$Activity)
 levels(merged$Activity)<-activity_labels[,2]
 merged$Subject<-as.factor(merged$Subject)
 
-
-#With dplyr
-#mean_and_std<-grep("mean|std",names(merged),value=TRUE)
-#tidy<-select(merged,mean_and_std,Activity)
-
-#Without dplyr
 #Subselect columnsname, select only those with mean or std, and do not forget Activity and Subject
 col_subset<-grep("^Activity|^Subject|mean|std",names(merged))
 tidy<-merged[col_subset]
@@ -53,11 +44,10 @@ names(tidy)<-sub("-std","StandardDeviation",names(tidy)) #Use full name for stan
 names(tidy)<-gsub("[\\(|\\)]","",names(tidy)) #Remove parenthesis
 names(tidy)<-sub(".*\\$","",names(tidy)) #Remove the leading merged$...
 names(tidy)<-sub("-","Axis",names(tidy)) #Replace the leading - before X, Y, Z with Axis
-#grouped<-group_by(merged,Activity)
+
 write.table(tidy,file="observations.txt",row.names=FALSE)
+
 #Aggregate all variables on Activity and Subject
 tidy_agg<-aggregate(tidy[3:81],list(tidy$Activity,tidy$Subject),mean)
 names(tidy_agg)<-c("Activity","Subject",paste(names(tidy_agg[3:81]),"MeanPerGroup",sep=""))
 write.table(tidy_agg,file="perSubjectActivityMean.txt",row.names=FALSE)
-
-#perActivitySummary<-summarize(grouped,mean())
