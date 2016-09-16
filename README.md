@@ -14,7 +14,7 @@ The available source data comes from different files:
 -   X: This file contanis the observations
 -   Y: This file contains the identified activity
 -   subject: This file contains the subject observed
--   
+
 ##Approach (see comments in R script for more detail)
 
 ###Combination of data
