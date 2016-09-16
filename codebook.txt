@@ -3,8 +3,8 @@ Feature Selection
 
 The features selected for this database come from the "Human Activity Recognition Using Smartphones Data Set" project (http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
 Using the data provided by this project (https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip) we have created two data sets
- - A data set with the Mean and StandardDeviation of the test and train observations, with the subject and activity: observations.csv
- - A data set with the Mean of the values in the first dataset aggregated per Activity and Subject: perSubjectActivityMean.csv
+ - A data set with the Mean and StandardDeviation of the test and train observations, with the subject and activity: observations.txt
+ - A data set with the Mean of the values in the first dataset aggregated per Activity and Subject: perSubjectActivityMean.txt
  
 'AxisXYZ' is used to denote 3Axisaxial signals in the X, Y and Z directions.
 
